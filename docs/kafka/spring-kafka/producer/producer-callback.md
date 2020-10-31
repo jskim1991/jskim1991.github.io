@@ -1,6 +1,6 @@
 # Producer Callback
 
-지난 글에서 가장 심플한 spring-kafka Producer를 구현하였습니.
+지난 글에서 가장 심플한 spring-kafka Producer를 구현하였습니다.
 이번에는 동일한 Producer에 callback을 붙여서 레코드 송신시 결과를 로그로 남기는 방법을 알아보겠습니다.
 
 ## Producer 구현
