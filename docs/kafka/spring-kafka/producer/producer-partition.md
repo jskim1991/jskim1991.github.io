@@ -5,6 +5,8 @@
 ## 목적
 1. 특정 레코드를 하나의 파티션으로 보내 순차적으로 처리
 
+<br/>
+
 ## Producer 구현
 ### Producer 설정
 지난 글에서 사용한 Producer와 설정 차이가 없어 동일한 설정과 동일한 `KafkaTemplate`으로 진행합니다.
@@ -63,6 +65,7 @@ public void sendMessage(String key, String message) {
 }
 ```
 
+<br/>
 
 ### 최종 모습
 ```java
@@ -122,6 +125,8 @@ public class SimplePartitionProducer {
 }
 ```
 
+<br/>
+
 ## Test 방법 
 ### Test용 REST API를 만들어 송신하기 
 ```java
@@ -146,6 +151,8 @@ public class ProducerController {
 ```
 localhost:8080/producer/simple-partition 호출 시 동일한 key를 가진 레코드는 항상 동일한 파티션에만 레코드가 쌓이는 것을 확인할 수 있습니다. 
 localhost:8080/producer/simple-partition-no-key 호출 시 레코드가 랜덤한 파티션으로 가는 것을 확인할 수 있습니다.
+
+<br/>
 
 ## 테스트 결과
 팁: kafka경로/bin 디렉토리에서 아래 실행 명령어를 사용하면 파티션별 쌓인 레코드 개수를 확인할 수 있습니다.

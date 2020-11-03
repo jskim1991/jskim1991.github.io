@@ -6,6 +6,8 @@
 ## 목적
 1. 송신 결과(성공/실패)에 따라 특정 custom 코드를 실행
 
+<br/>
+
 ## Producer 구현
 ### Producer 설정
 지난 글에서 사용한 Producer와 설정 차이가 없어 동일한 설정으로 진행합니다.
@@ -32,9 +34,10 @@ public KafkaTemplate<String, String> kafkaTemplate() {
 @Qualifier("simpleProducerKafkaTemplate")
 private KafkaTemplate<String, String> kafkaTemplate;
 ```
+※ 참고: 2번째 방법인 `ProducerListener`를 사용하는 경우에는 `KafkaTemplate`에 set을 해주는 부분이 있습니다.
 
 ### 코드 설명 
-### 1. Callback
+#### 1. Callback
 기본적으로 레코드 송신은 비동기 방식으로 동작합니다.
 그래서 `ListenableFutureCallback`을 구현해서 callback으로 추가합니다.
 Callback을 사용하면 송신할 때 사용하는 send() 메소드를 block 하지 않고 송신 결과를 받을 수 있는 장점이 있습니다.
@@ -103,6 +106,8 @@ Callback 방식과 다른 부분은 `ProducerListener`는 `KafkaTemplate`에 set
 ```
 위와 같이 설정이 되면 `kafkaTemplate.send(Message<?>)`를 수행하면 송신 성공에 onSuccess() 메소드를 수행하고 
 실패에 onError() 메소드를 수행하는 것을 알 수 있습니다.
+
+<br/>
 
 ### 최종 모습
 #### 1. Callback
@@ -221,6 +226,8 @@ public class SimpleProducerWithCustomProducerListener {
 }
 ```
 
+<br/>
+
 ## Test 방법 
 ### Test용 REST API를 만들어 송신하기 
 ```java
@@ -240,6 +247,8 @@ public class ProducerController {
 localhost:8080/producer/simple-callback 호출 시 넘겨주는 String 값을 레코드로 만들어 송신합니다.
 
 ProducerListener도 동일한 방식으로 테스트 할 수 있습니다.
+
+<br/>
 
 ## 테스트 결과
 3건의 레코드를 송신하면 아래와 같은 로그가 찍히는 것을 확인할 수 있습니다.

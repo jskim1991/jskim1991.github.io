@@ -2,6 +2,8 @@
 
 가장 심플한 spring-kafka Producer를 구현해보겠습니다.
 
+<br/>
+
 ## Producer 구현
 ### Producer 설정
 기본적으로 spring-kafka는 `KafkaTemplate`를 활용하여 레코드를 송신합니다.
@@ -47,6 +49,9 @@ public void sendMessage(String message) {
     kafkaTemplate.send(topic, message);
 }
 ```
+
+<br/>
+
 ### 최종 모습
 ```java
 import java.util.HashMap;
@@ -101,6 +106,8 @@ kafka:
   topic: test-topic
 ```
 
+<br/>
+
 ## Test 방법 
 ### Test용 REST API를 만들어 송신하기 
 ```java
@@ -122,12 +129,12 @@ localhost:8080/producer/simple 호출시 넘겨주는 String 값을 레코드로
 ### Kafka CLI를 활용하여 수신 테스트 방법
 $ `kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic 토픽명`
 
-NOTE
-* Consumer Tutorial을 통해 Consumer를 직접 구현해서 테스트하는 방법도 있습니다.
+※ 참고: Consumer Tutorial을 통해 Consumer를 직접 구현해서 테스트하는 방법도 있습니다.
 
+<br/>
 
 ## 참고 사항
 * 기본적으로 Application에서는 1개의 `KafkaTemplate`을 만들어서 사용하는 경우가 많습니다.
 * 하나 Spring Boot Application에서 여러 종류의 Producer를 만들고 선택해서 사용하고자 `@Bean("빈이름")`을 사용하여 Bean 이름을 지정하였습니다.
 * 여러 개의 동일한 bean이 존재하기 때문에 `@Qualifier("빈이름")`으로 원하는 종류의 producer를 사용하였습니다.
-* application.yml을 사용하여 Kafka 속성을 정의하는 경우, `KafkaTempqlate` 별도로 생성할 필요가 없습니다.
+* application.yml을 사용하여 Kafka 속성을 정의하는 경우, `KafkaTemplate` 별도로 생성할 필요가 없습니다.
