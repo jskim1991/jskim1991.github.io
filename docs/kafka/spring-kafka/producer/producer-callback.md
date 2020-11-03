@@ -4,7 +4,7 @@
 이번에는 동일한 Producer에 callback을 붙여서 레코드 송신시 결과를 로그로 남기는 방법을 알아보겠습니다.
 
 ## 목적
-1. 송신 결과(성공/실패)에 따라 특정 코드를 실행하기 위해
+1. 송신 결과(성공/실패)에 따라 특정 custom 코드를 실행
 
 ## Producer 구현
 ### Producer 설정
@@ -34,12 +34,13 @@ private KafkaTemplate<String, String> kafkaTemplate;
 ```
 
 ### 코드 설명 
+### 1. Callback
 기본적으로 레코드 송신은 비동기 방식으로 동작합니다.
 그래서 `ListenableFutureCallback`을 구현해서 callback으로 추가합니다.
 Callback을 사용하면 송신할 때 사용하는 send() 메소드를 block 하지 않고 송신 결과를 받을 수 있는 장점이 있습니다.
 
-레코드 송신 실패 시 `onFailure()` 메소드가 실행되며 송신 실 원인을 알 수 있습니다.
-아래 예제에서는 exception의 원인을 로그로 찍어보겠습니다.패
+레코드 송신 실패 시 `onFailure()` 메소드가 실행되며 송신 실패 원인을 알 수 있습니다.
+아래 예제에서는 exception의 원인을 로그로 찍어보겠습니다.
 
 송신이 성공적이면 `onSuccess()` 메소드가 실행되며 
 송신 성공한 레코드에 대한 기본 정보(metadata)를 출력하도록 구현하였습니다.
@@ -68,7 +69,43 @@ public void sendMessage(String message) {
     });
 }
 ```
+
+#### 2. ProducerListener
+송신 결과에 따라 특정 코드를 수행하는 다른 방법은 `ProducerListener`를 제공하는 것 입니다.
+Callback 방식과 다른 부분은 `ProducerListener`는 `KafkaTemplate`에 set 해야 합니다.
+```java
+    @Bean
+    public KafkaTemplate<String, String> kafkaTemplate() {
+        // producer configuration
+        Map<String, Object> props = new HashMap<>();
+        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "127.0.0.1:9092");
+        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+
+        // producer factory
+        DefaultKafkaProducerFactory<String, String> producerFactory = new DefaultKafkaProducerFactory<>(props);
+
+        // kafka template
+        KafkaTemplate<String, String> kafkaTemplate = new KafkaTemplate<>(producerFactory);
+        kafkaTemplate.setProducerListener(new ProducerListener<String, String>() {
+            @Override
+            public void onSuccess(ProducerRecord<String, String> producerRecord, RecordMetadata recordMetadata) {
+                System.out.println("Producer Listener - Sent to : " + recordMetadata.topic() + "-" + recordMetadata.partition() + "-" + recordMetadata.offset());
+            }
+
+            @Override
+            public void onError(ProducerRecord<String, String> producerRecord, Exception exception) {
+                System.out.println("Producer Listener - failed to send record due to " + exception.getMessage());
+            }
+        });
+        return kafkaTemplate;
+    }
+```
+위와 같이 설정이 되면 `kafkaTemplate.send(Message<?>)`를 수행하면 송신 성공에 onSuccess() 메소드를 수행하고 
+실패에 onError() 메소드를 수행하는 것을 알 수 있습니다.
+
 ### 최종 모습
+#### 1. Callback
 ```java
 import org.apache.kafka.clients.producer.RecordMetadata;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -117,6 +154,73 @@ public class SimpleProducerCallback {
 }
 ```
 
+#### 2. Producer Listener
+```java
+import org.apache.kafka.clients.producer.ProducerConfig;
+import org.apache.kafka.clients.producer.ProducerRecord;
+import org.apache.kafka.clients.producer.RecordMetadata;
+import org.apache.kafka.common.serialization.StringSerializer;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.kafka.core.DefaultKafkaProducerFactory;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.support.KafkaHeaders;
+import org.springframework.kafka.support.ProducerListener;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.support.MessageBuilder;
+import org.springframework.stereotype.Component;
+
+import java.util.HashMap;
+import java.util.Map;
+
+@Component
+public class SimpleProducerWithCustomProducerListener {
+
+    @Value("${kafka.topic-mp:sample-topic-mp}")
+    private String topic;
+
+    @Autowired
+    @Qualifier("simpleCustomProducerListenerTemplate")
+    private KafkaTemplate<String, String> kafkaTemplate;
+
+    public void sendMessage(String message) {
+        Message<String> record = MessageBuilder.withPayload(message)
+                .setHeader(KafkaHeaders.TOPIC, topic)
+                .build();
+        this.kafkaTemplate.send(record);
+    }
+
+    @Bean(name = "simpleCustomProducerListenerTemplate")
+    public KafkaTemplate<String, String> kafkaTemplate() {
+        // producer configuration
+        Map<String, Object> props = new HashMap<>();
+        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "127.0.0.1:9092");
+        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+
+        // producer factory
+        DefaultKafkaProducerFactory<String, String> producerFactory = new DefaultKafkaProducerFactory<>(props);
+
+        // kafka template
+        KafkaTemplate<String, String> kafkaTemplate = new KafkaTemplate<>(producerFactory);
+        kafkaTemplate.setProducerListener(new ProducerListener<String, String>() {
+            @Override
+            public void onSuccess(ProducerRecord<String, String> producerRecord, RecordMetadata recordMetadata) {
+                System.out.println("Producer Listener - Sent to : " + recordMetadata.topic() + "-" + recordMetadata.partition() + "-" + recordMetadata.offset());
+            }
+
+            @Override
+            public void onError(ProducerRecord<String, String> producerRecord, Exception exception) {
+                System.out.println("Producer Listener - failed to send record due to " + exception.getMessage());
+            }
+        });
+        return kafkaTemplate;
+    }
+}
+```
+
 ## Test 방법 
 ### Test용 REST API를 만들어 송신하기 
 ```java
@@ -134,6 +238,8 @@ public class ProducerController {
 }
 ```
 localhost:8080/producer/simple-callback 호출 시 넘겨주는 String 값을 레코드로 만들어 송신합니다.
+
+ProducerListener도 동일한 방식으로 테스트 할 수 있습니다.
 
 ## 테스트 결과
 3건의 레코드를 송신하면 아래와 같은 로그가 찍히는 것을 확인할 수 있습니다.
