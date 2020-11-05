@@ -1,6 +1,7 @@
 # Simple Consumer
 
 이번에는 spring-kafka를 활용하여 가장 기본적인 Consumer를 구현해보겠습니다.
+
 비즈니스 요구사항을 충족하는 Kafka Consumer를 구현하기 위해서는 Consumer에 대한 설정과 기본 이론을 이해하면 많은 도움이 되기 때문에
 코드 설명 중간중간에 공부하시면 좋은 주제를 팁으로 드리겠습니다.
 
@@ -28,7 +29,10 @@ public ConsumerFactory<String, String> consumerFactory() {
 }
 ```
 
+<br/>
+
 다음으로 containerFactory는 왜 사용할까요?
+
 containerFactory를 활용하면 consumer를 수행하는 Spring Boot App.에 대한 다양한 customizing이 가능합니다.
 앞으로 하나씩 배워가겠지만, consumer가 수신 처리를 실패하면 그 에러를 어떻게 대처하며, 
 어떤 방식으로 몇 번 retry를 하는 등 다양한 옵션을 구현할 수 있습니다.
@@ -44,12 +48,16 @@ public ConcurrentKafkaListenerContainerFactory<String, String> simpleKafkaListen
 ```
 ※ 참고: containerFactory를 spring bean으로 등록하지 않으면 default container factory가 제공됩니다.
 
+<br/>
+
 마지막으로 containerFactory를 `@KafkaListener`에 넘겨서 consumer를 생성해보겠습니다.
-KafkaListener 어노테이션에 넘길 수 있는 파라미터를 보면 매우 편리하게 되어있습니다.
-아래 예시는 하나의 토픽에 구독하지만 `topicPattern` 같은 파라미터를 사용하면 최소한의 코드로 수많은 consumer를 만들 수 있습니다.
+
 
 어노테이션 파라미터 중 `containerFactory` 값을 basicListenerContainerFactory (containerFactory bean 이름)로 준 것을 확인할 수 있습니다.
 이런 방식으로 한번 만든 containerFactory bean은 여러 @KafkaListener에서 지정하여 재사용할 수 있습니다.
+
+KafkaListener 어노테이션에 넘길 수 있는 파라미터를 보면 매우 편리하게 되어있습니다.
+아래 예시는 하나의 토픽에 구독하지만 `topicPattern` 같은 파라미터를 사용하면 최소한의 코드로 수많은 consumer를 만들 수 있습니다.
 ```java
 private final String groupId = "test-group-basic-consumer";
 
