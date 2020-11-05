@@ -48,7 +48,10 @@ public ConcurrentKafkaListenerContainerFactory<String, String> simpleKafkaListen
 
 마지막으로 containerFactory를 `@KafkaListener`에 넘겨서 consumer를 생성해보겠습니다.
 KafkaListener 어노테이션에 넘길 수 있는 파라미터를 보면 매우 편리하게 되어있습니다.
-아래 예시는 하나의 토픽에 구독하지만 topicPattern 같은 파라미터를 사용하면 최소한의 코드로 수많은 consumer를 만들 수 있습니다.
+아래 예시는 하나의 토픽에 구독하지만 `topicPattern` 같은 파라미터를 사용하면 최소한의 코드로 수많은 consumer를 만들 수 있습니다.
+
+어노테이션 파라미터 중 `containerFactory` 값을 basicListenerContainerFactory (containerFactory bean 이름)로 준 것을 확인할 수 있습니다.
+이런 방식으로 한번 만든 containerFactory bean은 여러 @KafkaListener에서 지정하여 재사용할 수 있습니다.
 ```java
 private final String groupId = "test-group-basic-consumer";
 
