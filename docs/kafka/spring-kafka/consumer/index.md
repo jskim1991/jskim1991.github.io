@@ -1,4 +1,4 @@
-# Spring Kafka Producer Home
+# Spring Kafka Consumer Home
 
 1. [Simple Consumer][simple-consumer-link] <br/>
 
