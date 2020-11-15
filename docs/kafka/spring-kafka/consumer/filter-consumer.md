@@ -1,20 +1,20 @@
 # Consumer Filtering
-이번 시간에는 특정 기준에 따라 수신하는 레코드를 처리할 지 판단 하는 filtering 기능에 대해서 배워보겠습니다.
+이번 시간에는 특정 기준에 따라 수신하는 레코드를 처리할지 판단 하는 filtering 기능에 대해서 배워보겠습니다.
 
 
 ## 목적
-수신할 레코드의 특정 정보를 기준으로 처리 할 지 판단시 사용.
+수신할 레코드의 특정 정보를 기준으로 처리할지 판단 시 사용.
 
 <br/>
 
 ## Consumer 구현
 ### Consumer 설정
-첫 번째 Consumer 강의에서 언급한 것 처럼, Kafka Client에 대한 설정은 consumerFactory에서 반영 하고,
-Consumer들이 실제 수신 처리를 하는 Spring Boot App.에서 customize 하는 부분은 containerFactory에서 반영한다고 배웠습니다. 
+첫 번째 Consumer 강의에서 언급한 것처럼, Kafka Client에 대한 설정은 consumerFactory에 반영하고,
+Consumer들이 실제 수신 처리를 하는 Spring Boot App.에서 customize 하는 부분은 containerFactory에 반영한다고 배웠습니다. 
 
-Filtering 같은 경우는 이번 특정 App.에서 custom하게 해야하는 일이기 때문에 containerFactory에 `RecordFilterStrategy`를 구현해야합니다.
+Filtering 같은 경우는 이번 특정 App.에서 custom하게 해야 하는 일이기 때문에 containerFactory에 `RecordFilterStrategy`를 구현해야 합니다.
 
-간단한 샘플을 위해 수신하는 레코드 payload에 특정 문자열이 존재할 때만 수신을 하겠다라고 한다면 다음과 같이 구현을 할 수 있습니다. 아래 expression이 true인 경우는 @KafkaListener가 지정된 메소드가 수행을 할 것이며, false인 경우는 수행하지 않을 것 입니다.
+간단한 샘플을 위해 수신하는 레코드 payload에 특정 문자열이 존재할 때만 수신을 하겠다라고 한다면 다음과 같이 구현을 할 수 있습니다. 아래 expression이 true인 경우는 @KafkaListener가 지정된 메소드가 수행을 할 것이며, false인 경우는 수행하지 않을 것입니다.
 
 ```java
 consumerRecord -> consumerRecord.value().contains(filterContent)
