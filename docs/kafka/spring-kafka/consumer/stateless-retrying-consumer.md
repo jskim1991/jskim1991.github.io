@@ -54,9 +54,9 @@ public void listen(String message) {
 
 여기서 중요한 부분은 stateless retry라는 부분입니다.
 단순히 RetryTemplate을 봤을 때 maxAttempts 값으로 몇 번 시도하고 있는지 알고 있는데 왜 stateless라고 할까요?
-Stateless 라는 부분은 Kafka Broker와 Consumer 관계에서 의미하는 부분으로 consumer가 일시적인 오류로 인해 retry하는 것을 Kafka Broker는 모른다는 것 입니다.
+Stateless 라는 부분은 Kafka broker와 consumer 관계에서 의미하는 부분으로 consumer가 일시적인 오류로 인해 retry하고 있다는 것을 Kafka broker는 모른다는 것 입니다.
 
-Kafka Broker가 모르면 어떻게 되나요? Broker가 왜 알아야 하나요?
+Kafka broker가 모르면 어떻게 되나요? Broker가 왜 알아야 하나요?
 그럼 무조건 stateful한게 좋을까요?
 이 질문들은 다음 시간에 알아보도록 하겠습니다.
 
