@@ -4,8 +4,7 @@
 
 <br/>
 
-## Producer 구현
-### Producer 설정
+## Producer 설정 및 구현
 기본적으로 spring-kafka는 `KafkaTemplate`를 활용하여 레코드를 송신합니다.
 
 Kafka 설정은 직접 `Map`에 원하는 Kafka 속성과 값을 넣고 `KafkaTemplate`을 생성할 때 활용할 수 있으며,
@@ -52,7 +51,7 @@ public void sendMessage(String message) {
 
 <br/>
 
-### 최종 모습
+## 최종 모습
 ```java
 import java.util.HashMap;
 import java.util.Map;

@@ -7,8 +7,7 @@
 
 <br/>
 
-## Consumer 구현
-### Consumer 설정
+## Consumer 설정 및 구현
 Consumer를 구현하려면 `consumerFactory`, `containerFactory`, `@KafkaListener`를 구현해서 사용해야 합니다.
 쉽게 생각하면 consumerFactory로 Kafka Consumer 설정을 정의하고
 consumerFactory를 활용하여 containerFactory를 만들고
@@ -71,7 +70,7 @@ public void listen(String message) {
 
 <br/>
 
-### 최종 모습
+## 최종 모습
 ```java
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;

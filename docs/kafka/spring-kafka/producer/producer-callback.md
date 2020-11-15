@@ -8,8 +8,7 @@
 
 <br/>
 
-## Producer 구현
-### Producer 설정
+## Producer 설정 및 구현
 지난 글에서 사용한 Producer와 설정 차이가 없어 동일한 설정으로 진행합니다.
 ```java
 @Bean(name = "simpleProducerKafkaTemplate")
@@ -109,8 +108,8 @@ Callback 방식과 다른 부분은 `ProducerListener`는 `KafkaTemplate`에 set
 
 <br/>
 
-### 최종 모습
-#### 1. Callback
+## 최종 모습
+### 1. Callback
 ```java
 import org.apache.kafka.clients.producer.RecordMetadata;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -159,7 +158,7 @@ public class SimpleProducerCallback {
 }
 ```
 
-#### 2. Producer Listener
+### 2. Producer Listener
 ```java
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;

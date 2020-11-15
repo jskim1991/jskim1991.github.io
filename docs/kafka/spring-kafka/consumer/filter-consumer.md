@@ -7,8 +7,7 @@
 
 <br/>
 
-## Consumer 구현
-### Consumer 설정
+## Consumer 설정 및 구현
 첫 번째 Consumer 강의에서 언급한 것처럼, Kafka Client에 대한 설정은 consumerFactory에 반영하고,
 Consumer들이 실제 수신 처리를 하는 Spring Boot App.에서 customize 하는 부분은 containerFactory에 반영한다고 배웠습니다. 
 
@@ -39,7 +38,7 @@ public ConcurrentKafkaListenerContainerFactory<String, String> simpleKafkaListen
 
 <br/>
 
-### 최종 모습
+## 최종 모습
 ```java
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -96,4 +95,3 @@ public class LessonThreeFilteringConsumer {
 ## Test 방법 
 기존과 동일하게 kafka-console-producer.sh를 사용하거나 직접 producer를 만들어서 구현하신 조건에 따라 @KafkaListener 메소드가 수행되는지 확인해보세요.
 
-<br/>

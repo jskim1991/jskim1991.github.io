@@ -7,8 +7,7 @@
 
 <br/>
 
-## Consumer 구현
-### Consumer 설정
+## Consumer 설정 및 구현
 특이 설정이 없으므로 지난 시간에 만든 containerFactory로 진행하도록 하겠습니다.
 
 먼저 특정 partition에 시작 offset을 지정해주는 방법입니다.
@@ -50,7 +49,7 @@ public void listen2(@Payload String message,
 
 <br/>
 
-### 최종 모습
+## 최종 모습
 ```java
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.annotation.PartitionOffset;

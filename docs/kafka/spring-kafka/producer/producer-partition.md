@@ -7,11 +7,9 @@
 
 <br/>
 
-## Producer 구현
-### Producer 설정
+## Producer 설정 및 구현
 지난 글에서 사용한 Producer와 설정 차이가 없어 동일한 설정과 동일한 `KafkaTemplate`으로 진행합니다.
 
-### 코드 설명
 Producer가 여러개의 파티션으로 구성된 토픽에 송신하는 경우, 레코드에 Message Key의 존재 여부에 따라 다르게 동작합니다.
 - Message Key가 존재하는 경우: Kafka가 Message key를 기반으로 Hashing을 통해 파티션을 결정 
 - Message Key가 없는 경우: Round-robin을 기반으로 파티션을 결정
