@@ -1,6 +1,5 @@
-# this is README.md in docs home.
-
-[kafka home][kafka-home-link] <br/>
+## 기술 Home
+[Spring Kafka][spring-kafka-home-link] <br/>
 
 [comment]: <> (link list)
-[kafka-home-link]: kafka/index "kafka home comment"
+[spring-kafka-home-link]: kafka/spring-kafka/index "kafka home comment"

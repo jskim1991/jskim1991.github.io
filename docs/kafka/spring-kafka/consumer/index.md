@@ -1,9 +1,11 @@
 # Spring Kafka Consumer Home
 
 1. [Simple Consumer][simple-consumer-link] <br/>
+2. [Specific Topic-Partition Consumer] [topic-partition-consumer-link] <br/>
+3. [Filtering Consumer] [filtering-consumer-link] <br/>
 
 [comment]: <> (link list)
 [simple-consumer-link]: simple-consumer "Simple Consumer"
-[producer-callback-link]: producer-callback "Producer Callback"
-[producer-partition-link]: producer-partition "Producer with Message Keys"
+[topic-partition-consumer-link]: specific-consumer "Specific Topic-Partition Consumer"
+[filtering-consumer-link]: filter-consumer "Filtering Consumer"
 
