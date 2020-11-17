@@ -1,4 +1,4 @@
-# 주제 제목
+# Error Handling & Retry [1]
 이번 시간에는 Error Handling & Retry 첫 번째 글입니다.
 Consumer가 레코드를 처리하다 비즈니스나 시스템에 의해 오류가 발생할 수 있습니다.
 그럼 처리가 되지 않은 레코드는 어떤 방법으로 핸들링해야 할까요?
