@@ -1,5 +1,5 @@
 # Error Handling & Retry [1]
-이번 시간에는 Error Handling & Retry 첫 번째 글입니다.
+이번에는 Error Handling & Retry 첫 번째 글을 만나보겠습니다.
 Consumer가 레코드를 처리하다 비즈니스나 시스템에 의해 오류가 발생할 수 있습니다.
 그럼 처리가 되지 않은 레코드는 어떤 방법으로 핸들링해야 할까요?
 
@@ -11,10 +11,6 @@ Consumer가 레코드를 처리하다 비즈니스나 시스템에 의해 오류
 ## Consumer 설정 및 구현
 spring-kafka 같은 경우는 spring-retry와 호환이 잘 되어 있어 RetryTemplate만 생성해서 사용하면 나머지는 Framework에서 모두 마법처럼 동작합니다.
 그럼 바로 코드로 먼저 보겠습니다.
-
-아래 예시 같은 경우는 `FixedBackOffPolicy`와 `SimpleRetryPolicy`를 만들어서 RetryTemplate에 사용한 것을 볼 수 있습니다.
-BackOff라는 것은 오류가 발생하고 잠시 뒤로 물러났다가 다시 도전한다는 개념입니다. BackOffPeriod가 1000ms 이면 오류가 발생하고 1초 후에 retry를 할 것을 의미합니다.
-RetryPolicy 같은 경우는 최대 몇 번을 retry 할지 설정할 수 있습니다. 아래 예시는 maxAttempts가 3으로 지정되어 있어 최초 1번 실행 + retry 2번을 시도합니다.
 
 ```java
 @Bean("retryingListenerContainerFactory")
@@ -40,7 +36,13 @@ public ConcurrentKafkaListenerContainerFactory<String, String> simpleKafkaListen
 }
 ```
 
-그럼 KafkaListener에서 강제로 exception을 발생시켜 위 설정값들이 어떤 영향이 있는지 한번 확인해보세요.
+위 예시 같은 경우는 `FixedBackOffPolicy`와 `SimpleRetryPolicy`를 만들어서 RetryTemplate에 사용한 것을 볼 수 있습니다.
+BackOff라는 것은 오류가 발생하고 잠시 뒤로 물러났다가 다시 도전한다는 개념입니다. BackOffPeriod가 1000ms 이면 오류가 발생하고 1초 후에 retry를 할 것을 의미합니다.
+RetryPolicy 같은 경우는 최대 몇 번을 retry 할지 설정할 수 있습니다. 아래 예시는 maxAttempts가 3으로 지정되어 있어 최초 1번 실행 + 2번 retry를 시도합니다.
+
+<br/>
+
+그럼 KafkaListener에서 강제로 exception을 발생시켜 위 설정값들이 어떤 영향을 주는지 확인해보세요.
 ```java
 @KafkaListener(topics = { "test-topic-retry" }, containerFactory = "retryingListenerContainerFactory", groupId = groupId)
 public void listen(String message) {
