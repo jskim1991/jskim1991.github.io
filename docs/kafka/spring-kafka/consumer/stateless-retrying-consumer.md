@@ -38,7 +38,7 @@ public ConcurrentKafkaListenerContainerFactory<String, String> simpleKafkaListen
 
 위 예시 같은 경우는 `FixedBackOffPolicy`와 `SimpleRetryPolicy`를 만들어서 RetryTemplate에 사용한 것을 볼 수 있습니다.
 BackOff라는 것은 오류가 발생하고 잠시 뒤로 물러났다가 다시 도전한다는 개념입니다. BackOffPeriod가 1000ms 이면 오류가 발생하고 1초 후에 retry를 할 것을 의미합니다.
-RetryPolicy 같은 경우는 최대 몇 번을 retry 할지 설정할 수 있습니다. 아래 예시는 maxAttempts가 3으로 지정되어 있어 최초 1번 실행 + 2번 retry를 시도합니다.
+RetryPolicy 같은 경우는 최대 몇 번을 retry 할지 설정할 수 있습니다. 아래 예시는 maxAttempts가 3으로 지정되어 있어 최종 3번 (최초 1번 실행 + 2번 retry) 시도합니다.
 
 <br/>
 
