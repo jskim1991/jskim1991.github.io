@@ -29,8 +29,8 @@ fixedBackOff.setMaxAttempts(3);
 SeekToCurrentErrorHandler errorHandler = new SeekToCurrentErrorHandler(fixedBackOff);
 ```
 
-만약 수신 오류가 발생한 레코드와 원인에 따라 custom한 코드를 수행하고 싶다면 SeekToCurrentErrorHandler 생성자의 첫 번째 파라미터에 FunctionalInterface를 구현할 수 있습니다.
-예시로 처리 실패한 레코드와 원인을 console에 찍어보겠습니다.
+오류가 발생한 레코드와 원인에 따라 custom한 코드를 수행하고 싶다면 SeekToCurrentErrorHandler 생성자의 첫 번째 파라미터에 FunctionalInterface를 구현할 수 있습니다.
+예시로 처리 실패한 레코드와 원인을 console에 찍어보겠습니다. 주의하실 점은 **아래 custom 코드는 모든 retry가 실패하면 실행**됩니다.
 ```java
 @Bean("simpleStatefulRetryingListenerContainerFactory")
 public ConcurrentKafkaListenerContainerFactory<String, String> simpleKafkaListenerContainerFactory() {
